@@ -1,0 +1,24 @@
+services:
+  web:
+    image: nginx:alpine
+    container_name: final-nginx
+    ports:
+      - "${HOST_PORT}:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  backend:
+    build: ./backend
+    container_name: final-backend
+    environment:
+      - BACKEND_PORT=${BACKEND_PORT}
+      - APP_ENV=${APP_ENV}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:${BACKEND_PORT}/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
