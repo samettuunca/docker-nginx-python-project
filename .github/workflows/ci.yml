@@ -15,3 +15,11 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t final-backend ./backend
+
+      - name: Run Docker container
+        run: docker run -d --name test-backend -p 8000:8000 final-backend
+
+      - name: Test application
+        run: |
+          sleep 3
+          curl http://localhost:8000/health
