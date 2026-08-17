@@ -22,7 +22,7 @@ jobs:
       - name: Health check
         run: |
           sleep 3
-         curl -f http://localhost:8000/yanlis
+          curl -f http://localhost:8000/yanlis
 
   build:
     needs: test
